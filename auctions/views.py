@@ -84,6 +84,7 @@ def register(request):
 #if the user isn't logged in he will be directed to the login page
 @login_required(login_url='login')
 def watch_list(request):
+    #render the watchlist page and passing all the list listings that the user added 
     return render(request, "watchlist.html", {
         "watchlist": watchlist.objects.filter(user_id=request.user)
     })
@@ -124,3 +125,16 @@ def create(request):
     return render(request, "auctions/create.html", {
         "form" : NewTaskForm()
     })
+
+def categories(request):
+    if request.method == "POST":
+        # get the category selected
+        selected_category = request.POST.get('c')
+        return render(request, "auctions/categories.html",{
+            "categories" : listing.objects.filter(category=selected_category)
+        })
+    
+    else:
+        return render(request, "auctions/categories.html", {
+          "categories" : listing.objects.all()
+        })

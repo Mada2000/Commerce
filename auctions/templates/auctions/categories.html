@@ -1,0 +1,30 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+    <form method="post" action="{% url 'categories' %}">
+        {% csrf_token %}
+        <select name="c">
+            <option value="1">Fashion</option>
+            <option value="2">Toys</option>
+            <option value="3">Electronics</option>
+            <option value="4">Home</option>
+            <option value="5">Other</option>
+            <!-- Add more options as needed -->
+        </select>
+        <button type="submit">Go</button>
+    </form>
+
+    {% for category in categories %}
+    <div class="listing">
+        <img src="{{ category.url }}" alt="{{ category.name }}" width="256" height="256">
+        <div class="listing_info">
+            <h2>{{ category.name }}</h2>
+            <h4>Price: {{ category.starting_bid }}</h4>
+            <p>{{ category.descrpition }}</p>
+            <p>Created: {{ category.date }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}
