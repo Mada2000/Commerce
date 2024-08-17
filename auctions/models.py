@@ -10,10 +10,13 @@ class listing(models.Model):
     name = models.CharField(max_length=64)
     lister_name = models.ForeignKey(User, related_name="lister", on_delete=models.CASCADE)
     url = models.CharField(max_length=512)
-    price = models.IntegerField()
-    date = models.DateTimeField()
+    starting_bid = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=64)
-    description = models.TextField(max_length=256)
+    description = models.TextField(max_length=1024)
+    def __str__(self):
+        return f"{self.id}: {self.name}"
+    
 
 class comment(models.Model):
     list_name = models.ForeignKey(listing,blank=False, on_delete=models.CASCADE, related_name="list_comment")

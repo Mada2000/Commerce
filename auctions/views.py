@@ -3,12 +3,31 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django import forms
 
-from .models import User
 
+from .models import User , listing , comment , Bid
+
+
+class NewTaskForm(forms.Form):
+    CHOICES =( 
+    ('1', "Fashion"), 
+    ('2', "Toys"), 
+    ('3', "Electronics"),
+    ('4', "Home"), 
+    ('5', "Other") 
+) 
+    title = forms.CharField(max_length=100)
+    description = forms.CharField(widget=forms.Textarea)
+    starting_bid = forms.IntegerField(max_value=10000000)
+    Category = forms.ChoiceField(choices = CHOICES)
+    url = forms.URLField(label='Link', required=False)
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings" : listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -61,3 +80,40 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+#if the user isn't logged in he will be directed to the login page
+@login_required(login_url='login')
+def create(request):
+    if request.method == 'POST':
+        #get the data from the form
+        form = NewTaskForm(request.POST)
+
+        #check if form data is valid
+        if form.is_valid():
+
+            # Isolate the data from the 'cleaned' version of form data
+            title = form.cleaned_data["title"]
+            desc = form.cleaned_data["description"]
+            bid = form.cleaned_data["starting_bid"]
+            Category = form.cleaned_data["Category"]
+            link = form.cleaned_data["url"]
+
+            # Add the new task to our list of tasks
+            new_listing = listing(name=title, lister_name=request.user , url=link, starting_bid=bid , category = Category , description = desc)
+            new_listing.save()
+            
+            
+            return HttpResponseRedirect(reverse("index"))
+
+        else:
+
+            # If the form is invalid, re-render the page with existing information.
+            return render(request, "auctions/create.html", {
+                "form": form
+            })
+
+
+    #if form isn't submitted
+    return render(request, "auctions/create.html", {
+        "form" : NewTaskForm()
+    })
