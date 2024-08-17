@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 
 
-from .models import User , listing , comment , Bid
+from .models import User , listing , comment , Bid, watchlist
 
 
 class NewTaskForm(forms.Form):
@@ -80,6 +80,13 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+    
+#if the user isn't logged in he will be directed to the login page
+@login_required(login_url='login')
+def watch_list(request):
+    return render(request, "watchlist.html", {
+        "watchlist": watchlist.objects.filter(user_id=request.user)
+    })
 
 #if the user isn't logged in he will be directed to the login page
 @login_required(login_url='login')

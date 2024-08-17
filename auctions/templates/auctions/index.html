@@ -3,11 +3,15 @@
 {% block body %}
     <h2>Active Listings</h2>
     {% for listing in listings %}
-    <div>
-        <img src="{{ listing.url }}" alt="Lamp" width="32" height="32">
-        <h2>{{ listing.name }}</h2>
-        <h2>Pirce: {{ listing.starting_bid }}</h2>
-        <p>{{ listing.date }}</p>
+    <div class="listing">
+        <img src="{{ listing.url }}" alt="{{ listing.name }}" width="256" height="256">
+        <div class="listing_info">
+            <h2>{{ listing.name }}</h2>
+            <h4>Price: {{ listing.starting_bid }}</h4>
+            <p>{{ listing.descrpition }}</p>
+            <p>Created: {{ listing.date }}</p>
+        </div>
+        
     </div>
     {% endfor %}
 {% endblock %}
