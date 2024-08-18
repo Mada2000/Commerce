@@ -30,6 +30,6 @@ class Bid(models.Model):
 
 class watchlist(models.Model):
     user_id = models.ForeignKey(User, blank=False, on_delete=models.CASCADE ,  related_name="user_id")
-    listing_name = models.ForeignKey(listing,blank=False ,  on_delete=models.CASCADE, related_name="listing")
+    listing_name = models.ForeignKey(listing ,blank=False ,  on_delete=models.CASCADE, related_name="listing")
     def __str__(self):
         return f"{self.user_id}: {self.listing_name}"

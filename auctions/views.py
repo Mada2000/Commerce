@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 
 
 from .models import User , listing , comment , Bid, watchlist
@@ -89,6 +90,23 @@ def watch_list(request):
         "watchlist": watchlist.objects.filter(user_id=request.user)
     })
 
+def add_to_watchlist(request, listing_id):
+    listing_details = listing.objects.get(id=listing_id)
+    try:
+        delete_from_watchlist = watchlist.objects.get(user_id=request.user , listing_name=listing_details)
+        delete_from_watchlist.delete()
+        return render(request, "auctions/listings.html", {
+            "listing": listing_details,
+            "message": 0
+        })
+    except ObjectDoesNotExist:
+        insert_to_watchlist = watchlist(user_id=request.user , listing_name=listing_details)
+        insert_to_watchlist.save()
+        return render(request, "auctions/listings.html", {
+            "listing": listing_details,
+            "message": 1
+        })
+
 #if the user isn't logged in he will be directed to the login page
 @login_required(login_url='login')
 def create(request):
@@ -137,4 +155,19 @@ def categories(request):
     else:
         return render(request, "auctions/categories.html", {
           "categories" : listing.objects.all()
+        })
+
+def listingg(request, listing_id):
+    listing_details = listing.objects.get(id=listing_id)
+    try:
+        watchlist.objects.get(user_id=request.user , listing_name=listing_details)
+        return render(request, "auctions/listings.html", {
+            "listing": listing_details,
+            "message": 1
+        })
+    except ObjectDoesNotExist:
+        return render(request, "auctions/listings.html", {
+            "listing": listing_details,
+            "message": 0
+
         })
