@@ -93,6 +93,7 @@ def watch_list(request):
 def add_to_watchlist(request, listing_id):
     listing_details = listing.objects.get(id=listing_id)
     try:
+        # delete the listing from the database if found
         delete_from_watchlist = watchlist.objects.get(user_id=request.user , listing_name=listing_details)
         delete_from_watchlist.delete()
         return render(request, "auctions/listings.html", {
@@ -100,6 +101,7 @@ def add_to_watchlist(request, listing_id):
             "message": 0
         })
     except ObjectDoesNotExist:
+        # if not found insert into the database
         insert_to_watchlist = watchlist(user_id=request.user , listing_name=listing_details)
         insert_to_watchlist.save()
         return render(request, "auctions/listings.html", {
@@ -159,15 +161,23 @@ def categories(request):
 
 def listingg(request, listing_id):
     listing_details = listing.objects.get(id=listing_id)
-    try:
-        watchlist.objects.get(user_id=request.user , listing_name=listing_details)
-        return render(request, "auctions/listings.html", {
-            "listing": listing_details,
-            "message": 1
-        })
-    except ObjectDoesNotExist:
-        return render(request, "auctions/listings.html", {
-            "listing": listing_details,
-            "message": 0
+    if request.user.is_authenticated:
+        try:
+            # check if the listing is in the watchlist pass the message
+            watchlist.objects.get(user_id=request.user , listing_name=listing_details)
+            return render(request, "auctions/listings.html", {
+                "listing": listing_details,
+                "message": 1
+            })
+        
+            # if the listing isn't there 
+        except ObjectDoesNotExist:
+            return render(request, "auctions/listings.html", {
+                "listing": listing_details,
+                "message": 0
 
-        })
+            })
+    else:
+        return render(request, "auctions/listings.html", {
+                "listing": listing_details
+            })
