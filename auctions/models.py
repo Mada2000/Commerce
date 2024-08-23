@@ -11,6 +11,7 @@ class listing(models.Model):
     lister_name = models.ForeignKey(User, related_name="lister", on_delete=models.CASCADE)
     url = models.CharField(max_length=512)
     starting_bid = models.IntegerField()
+    current_bid = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=64)
     description = models.TextField(max_length=1024)

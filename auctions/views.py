@@ -11,6 +11,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import User , listing , comment , Bid, watchlist
 
 
+class BidForm(forms.Form):
+    bid = forms.IntegerField(max_value=10000000)
+
 class NewTaskForm(forms.Form):
     CHOICES =( 
     ('1', "Fashion"), 
@@ -86,10 +89,12 @@ def register(request):
 @login_required(login_url='login')
 def watch_list(request):
     #render the watchlist page and passing all the list listings that the user added 
-    return render(request, "watchlist.html", {
+    return render(request, "auctions/watchlist.html", {
         "watchlist": watchlist.objects.filter(user_id=request.user)
     })
 
+#if the user isn't logged in he will be directed to the login page
+@login_required(login_url='login')
 def add_to_watchlist(request, listing_id):
     listing_details = listing.objects.get(id=listing_id)
     try:
@@ -127,7 +132,7 @@ def create(request):
             link = form.cleaned_data["url"]
 
             # Add the new task to our list of tasks
-            new_listing = listing(name=title, lister_name=request.user , url=link, starting_bid=bid , category = Category , description = desc)
+            new_listing = listing(name=title, lister_name=request.user ,current_bid = 0, url=link, starting_bid=bid , category = Category , description = desc)
             new_listing.save()
             
             
@@ -161,21 +166,39 @@ def categories(request):
 
 def listingg(request, listing_id):
     listing_details = listing.objects.get(id=listing_id)
+    bid_details = Bid.objects.filter(listing_name=listing_details)
     if request.user.is_authenticated:
+        if request.method == "POST":
+            #get data
+            bid_form = BidForm(request.POST)
+            if bid_form.is_valid():
+                # Isolate the data from the 'cleaned' version of form data
+                bid = bid_form.cleaned_data["bid"]
+                if bid > listing_details.starting_bid and bid > listing_details.current_bid:
+                    # NEED TO FIX : MAKE THE USERS ABLE TO BID 
+                    new_bid2 = Bid(listing_name=listing_details , bid_price=bid, user_name=request.user )
+                    listing_details.current_bid = bid
+                    new_bid2.save()
+                    listing_details.save()
+                    listing_details = listing.objects.get(id=listing_id)
+                    bid_details = Bid.objects.filter(listing_name=listing_details)
         try:
             # check if the listing is in the watchlist pass the message
             watchlist.objects.get(user_id=request.user , listing_name=listing_details)
             return render(request, "auctions/listings.html", {
                 "listing": listing_details,
-                "message": 1
+                "message": 1,
+                "bid_form" : BidForm(),
+                "bids": bid_details
             })
         
             # if the listing isn't there 
         except ObjectDoesNotExist:
             return render(request, "auctions/listings.html", {
                 "listing": listing_details,
-                "message": 0
-
+                "message": 0,
+                "bid_form" : BidForm(),
+                "bids": bid_details
             })
     else:
         return render(request, "auctions/listings.html", {

@@ -3,6 +3,7 @@
 {% block body %}
     <h2>Watchlist</h2>
     {% for list in watchlist %}
+    <a href="{% url 'listingg' list.listing_name.id %}">
     <div class="listing">
         <img src="{{ list.listing_name.url }}" alt="{{ list.listing_name.name }}" width="256" height="256">
         <div class="listing_info">
@@ -11,7 +12,7 @@
             <p>{{ list.listing_name.descrpition }}</p>
             <p>Created: {{ list.listing_name.date }}</p>
         </div>
-            
+    </a>
 
     </div>
     {% endfor %}

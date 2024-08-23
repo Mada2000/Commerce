@@ -16,5 +16,21 @@
             <p>{{ listing.descrpition }}</p>
             <p>Created: {{ listing.date }}</p>
         </div>
+        <form action="{% url 'listingg' listing.id %}" method="post">
+            {% csrf_token %}
+            {{ bid_form }}
+            <input type="submit">
+        </form>
+        <div>
+            <h2>Current Bids</h2>
+        </div>
+            {% for bid in bids %}
+                <div>
+                    <h4>{{ bid.user_name }}</h4>
+                    <h4>{{ bid.bid_price }}</h4>
+                </div>
+            {% endfor %}
+
+
     </div>
 {% endblock %}
