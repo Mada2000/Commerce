@@ -10,21 +10,22 @@
             <option value="3">Electronics</option>
             <option value="4">Home</option>
             <option value="5">Other</option>
-            <!-- Add more options as needed -->
         </select>
-        <button type="submit">Go</button>
+        <button type="submit">Search</button>
     </form>
 
     {% for category in categories %}
-    <div class="listing">
-        <img src="{{ category.url }}" alt="{{ category.name }}" width="256" height="256">
-        <div class="listing_info">
-            <h2>{{ category.name }}</h2>
-            <h4>Price: {{ category.starting_bid }}</h4>
-            <p>{{ category.descrpition }}</p>
-            <p>Created: {{ category.date }}</p>
+    <a href="{% url 'listingg' category.id %}">
+        <div class="listing">
+            <img src="{{ category.url }}" alt="{{ category.name }}" width="256" height="256">
+            <div class="listing_info">
+                <h2>{{ category.name }}</h2>
+                <h4>Price: {{ category.starting_bid }}</h4>
+                <p>{{ category.descrpition }}</p>
+                <p>Created: {{ category.date }}</p>
+            </div>
         </div>
-    </div>
+    </a>
     {% endfor %}
 
 {% endblock %}

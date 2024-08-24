@@ -2,25 +2,54 @@
 
 {% block body %}
     <div class="listing">
-        {% if user.is_authenticated %}
-            {% if  message == 0 %}
-                <a href="{% url 'add_to_watchlist' listing.id %}">add to watchlist</a>
-            {% else %}
-                <a href="{% url 'add_to_watchlist' listing.id %}">Remove From watchlist</a>
+        {% if listing.closed == False %}
+            {% if user.is_authenticated %}
+                {% if  message == 0 %}
+                    <a href="{% url 'add_to_watchlist' listing.id %}">Add to watchlist</a>
+                {% else %}
+                    <a href="{% url 'add_to_watchlist' listing.id %}">Remove From watchlist</a>
+                {% endif %}
+                {% if message2 == 1 %}
+                    <a href="{% url 'close_bet' listing.id %}">Close bet</a>
+                {% endif %}
+                <form action="{% url 'listingg' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {{ comment_form }}
+                    <input type="submit" value="Post">
+                </form>
             {% endif %}
+        {% else %}
+            <h2>The bet is Closed!</h2>
         {% endif %}
+        <div>
+            <h2>Comments</h2>
+            {% for comment in comments %}
+            <div>
+                <h4>{{ comment.commenter_name }}</h4>
+                <p>{{ comment.list_comment }}</p>
+            </div>
+            {% endfor %}
+        </div>
         <img src="{{ listing.url }}" alt="{{ listing.name }}" width="256" height="256">
         <div class="listing_info">
             <h2>{{ listing.name }}</h2>
             <h4>Price: {{ listing.starting_bid }}</h4>
             <p>{{ listing.descrpition }}</p>
             <p>Created: {{ listing.date }}</p>
+            <p>Posted by: {{ listing.lister_name }}</p>
+            
         </div>
-        <form action="{% url 'listingg' listing.id %}" method="post">
-            {% csrf_token %}
-            {{ bid_form }}
-            <input type="submit">
-        </form>
+        {% if listing.closed == False %}
+            {% if user.is_authenticated %}
+                {% if not listing.lister_name == user %}
+                    <form action="{% url 'listingg' listing.id %}" method="post">
+                        {% csrf_token %}
+                        {{ bid_form }}
+                        <input type="submit">
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% endif %}
         <div>
             <h2>Current Bids</h2>
         </div>
@@ -29,6 +58,12 @@
                     <h4>{{ bid.user_name }}</h4>
                     <h4>{{ bid.bid_price }}</h4>
                 </div>
+                {% if bid.closed == True %}
+                    <p>WINNER</p>
+                {% endif %}
+                {% if bid.user_name == user and bid.closed == True %}
+                    <p>Congratulations, You have won the auction!</p>
+                {% endif %}
             {% endfor %}
 
 

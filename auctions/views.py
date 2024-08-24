@@ -14,6 +14,9 @@ from .models import User , listing , comment , Bid, watchlist
 class BidForm(forms.Form):
     bid = forms.IntegerField(max_value=10000000)
 
+class CommentForm(forms.Form):
+    comment2 = forms.CharField(widget=forms.Textarea)
+
 class NewTaskForm(forms.Form):
     CHOICES =( 
     ('1', "Fashion"), 
@@ -101,18 +104,12 @@ def add_to_watchlist(request, listing_id):
         # delete the listing from the database if found
         delete_from_watchlist = watchlist.objects.get(user_id=request.user , listing_name=listing_details)
         delete_from_watchlist.delete()
-        return render(request, "auctions/listings.html", {
-            "listing": listing_details,
-            "message": 0
-        })
+        return HttpResponseRedirect(reverse("listingg", args=[listing_id]))
     except ObjectDoesNotExist:
         # if not found insert into the database
         insert_to_watchlist = watchlist(user_id=request.user , listing_name=listing_details)
         insert_to_watchlist.save()
-        return render(request, "auctions/listings.html", {
-            "listing": listing_details,
-            "message": 1
-        })
+        return HttpResponseRedirect(reverse("listingg", args=[listing_id]))
 
 #if the user isn't logged in he will be directed to the login page
 @login_required(login_url='login')
@@ -167,21 +164,31 @@ def categories(request):
 def listingg(request, listing_id):
     listing_details = listing.objects.get(id=listing_id)
     bid_details = Bid.objects.filter(listing_name=listing_details)
+    comments = comment.objects.filter(list_name=listing_details)
+    message2 = 0
+    if request.user == listing_details.lister_name:
+        message2 = 1
     if request.user.is_authenticated:
         if request.method == "POST":
             #get data
+            comment_form = CommentForm(request.POST)
             bid_form = BidForm(request.POST)
             if bid_form.is_valid():
                 # Isolate the data from the 'cleaned' version of form data
                 bid = bid_form.cleaned_data["bid"]
                 if bid > listing_details.starting_bid and bid > listing_details.current_bid:
-                    # NEED TO FIX : MAKE THE USERS ABLE TO BID 
+                    # if the bid is higher than the last bid and the bid specified by the user then add to the database and update the current bid in the listing to the new value
                     new_bid2 = Bid(listing_name=listing_details , bid_price=bid, user_name=request.user )
                     listing_details.current_bid = bid
                     new_bid2.save()
                     listing_details.save()
                     listing_details = listing.objects.get(id=listing_id)
                     bid_details = Bid.objects.filter(listing_name=listing_details)
+            if comment_form.is_valid():
+                #if the comment is valid then add to the database
+                Comment = comment_form.cleaned_data["comment2"]
+                new_comment = comment(list_name=listing_details, list_comment=Comment, commenter_name=request.user)
+                new_comment.save()
         try:
             # check if the listing is in the watchlist pass the message
             watchlist.objects.get(user_id=request.user , listing_name=listing_details)
@@ -189,7 +196,10 @@ def listingg(request, listing_id):
                 "listing": listing_details,
                 "message": 1,
                 "bid_form" : BidForm(),
-                "bids": bid_details
+                "comment_form" : CommentForm(),
+                "bids": bid_details,
+                "comments": comments,
+                "message2": message2
             })
         
             # if the listing isn't there 
@@ -198,9 +208,22 @@ def listingg(request, listing_id):
                 "listing": listing_details,
                 "message": 0,
                 "bid_form" : BidForm(),
-                "bids": bid_details
+                "comment_form" : CommentForm(),
+                "bids": bid_details,
+                "comments": comments,
+                "message2": message2
             })
     else:
         return render(request, "auctions/listings.html", {
-                "listing": listing_details
+                "listing": listing_details,
+                "bids": bid_details,
+                "comments": comments
             })
+def close_bet(request, listing_id):
+    listing_details = listing.objects.get(id=listing_id)
+    listing_details.closed = True
+    listing_details.save()
+    winner_bid = Bid.objects.get(listing_name=listing_details, bid_price=listing_details.current_bid)
+    winner_bid.closed = True
+    winner_bid.save()
+    return HttpResponseRedirect(reverse("listingg", args=[listing_id]))
