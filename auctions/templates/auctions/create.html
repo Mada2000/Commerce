@@ -3,10 +3,15 @@
     Create Listing
 {% endblock %}
 {% block body %}
-    <h2>Create Listing</h2>
-    <form action="{% url 'create' %}" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit">
-    </form>
+    <h2 class="form_header">Create Listing</h2>
+    <div class="container-sm">
+        <form action="{% url 'create' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <div class="b6">
+                <!-- the button style is from by Sketch https://getcssscan.com/css-buttons-examples !-->
+                <input class="button-6" value="Create Listing" type="submit"></input>
+            </div>    
+        </form>
+    </div>
 {% endblock %}

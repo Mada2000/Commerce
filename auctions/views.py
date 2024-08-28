@@ -6,16 +6,14 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
-
-
 from .models import User , listing , comment , Bid, watchlist
 
 
 class BidForm(forms.Form):
-    bid = forms.IntegerField(max_value=10000000)
+    bid = forms.IntegerField(max_value=10000000 ,widget=forms.NumberInput(attrs={'class': 'myfieldclass'}))
 
 class CommentForm(forms.Form):
-    comment2 = forms.CharField(widget=forms.Textarea)
+    comment2 = forms.CharField(widget=forms.Textarea(attrs={'class': 'myfieldclass'}))
 
 class NewTaskForm(forms.Form):
     CHOICES =( 
@@ -25,11 +23,11 @@ class NewTaskForm(forms.Form):
     ('4', "Home"), 
     ('5', "Other") 
 ) 
-    title = forms.CharField(max_length=100)
-    description = forms.CharField(widget=forms.Textarea)
-    starting_bid = forms.IntegerField(max_value=10000000)
-    Category = forms.ChoiceField(choices = CHOICES)
-    url = forms.URLField(label='Link', required=False)
+    title = forms.CharField(max_length=100 , widget=forms.TextInput(attrs={'class': 'form-control'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+    starting_bid = forms.IntegerField(max_value=10000000, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    Category = forms.ChoiceField(choices = CHOICES,widget=forms.Select(attrs={'class': 'form-control'}))
+    url = forms.URLField(label='Link', required=False, widget=forms.URLInput(attrs={'class': 'form-control'}))
 
 def index(request):
     return render(request, "auctions/index.html", {

@@ -1,18 +1,50 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    {% for listing in listings %}
-    <a href="{% url 'listingg' listing.id %}">
-    <div class="listing">
-        <img src="{{ listing.url }}" alt="{{ listing.name }}" width="256" height="256">
-        <div class="listing_info">
-            <h2>{{ listing.name }}</h2>
-            <h4>Price: {{ listing.starting_bid }}</h4>
-            <p>{{ listing.descrpition }}</p>
-            <p>Created: {{ listing.date }}</p>
-        </div>
+<h2 class="active_listing_heading">Active Listings</h2>
+<div class="row row-cols-1 row-cols-md-4 g-4">
+  {% for listing in listings %}
+
+  <div class="col">
+    <div class="card h-100">
+      <a class="text-decoration-none" href="{% url 'listingg' listing.id %}">
+        <!-- the onerror attribute is from cs50.ai  -->
+        <img src="{{ listing.url }}" class="card-img-top"
+          onerror="this.src='https://archive.org/download/no-photo-available/no-photo-available.png';">
+
+        <div class="card-body">
+          <h3 class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-tag-fill" viewBox="0 0 16 16">
+              <path
+                d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+            </svg> {{ listing.name }}</h3>
+          <div class="card-textt">
+            <h5><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-cash-stack" viewBox="0 0 16 16">
+                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                <path
+                  d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z" />
+              </svg> {{ listing.starting_bid }}$</h5>
+            <p class="limited-paragraph"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-chat-right-text" viewBox="0 0 16 16">
+                <path
+                  d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z" />
+                <path
+                  d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+              </svg> {{ listing.description }}</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock"
+                viewBox="0 0 16 16">
+                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+              </svg> {{ listing.date }}</p>
+
+          </div>
+
+      </a>
     </div>
-    </a>
-    {% endfor %}
+  </div>
+</div>
+
+{% endfor %}
+</div>
 {% endblock %}
