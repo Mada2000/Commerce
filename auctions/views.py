@@ -10,10 +10,10 @@ from .models import User , listing , comment , Bid, watchlist
 
 
 class BidForm(forms.Form):
-    bid = forms.IntegerField(max_value=10000000 ,widget=forms.NumberInput(attrs={'class': 'myfieldclass'}))
+    bid = forms.IntegerField(max_value=10000000 ,widget=forms.NumberInput(attrs={'class': 'form-control','placeholder': 'Place Bid'} ))
 
 class CommentForm(forms.Form):
-    comment2 = forms.CharField(widget=forms.Textarea(attrs={'class': 'myfieldclass'}))
+    comment2 = forms.CharField(max_length=256 , widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Comment'}))
 
 class NewTaskForm(forms.Form):
     CHOICES =( 

@@ -1,14 +1,95 @@
 body {
     padding: 10px;
 }
-
-.listing{
-    display: inline;
-    outline-color: black;
-    background-color: rgba(245, 245, 220, 0.689);
-    width: 200px;
-    margin: 30px;
+.watchlist_icon{
+  position: absolute;
+  top: 10px;
+  left: 300px;
+  z-index: 2;
 }
+.bid_form{
+  margin-left: 200px;
+}
+.container{
+  padding:40px
+}
+.comment_form{
+  width: 90%;
+  margin-left: 20px;
+  margin-top: 10px;
+
+}
+.close_bet{
+  margin-right: 75px;
+  text-align: center;
+}
+.categories_form{
+  width: 200px;
+  display: inline-flex;
+  height: 35px;
+  margin-right: 10px;
+  margin-bottom: 30px;
+  margin-left: 10px;
+}
+.comment_form label{
+  display: none;
+}
+.current_bids_heading{
+  margin-bottom: 30px;
+  margin-left: 90px;
+}
+.bet_closed{
+  margin-left: 20px;
+}
+.congratz_message{
+  margin-left: 30px;
+}
+.comments1{
+  text-align: left;
+  
+}
+.comments2{
+  text-align: left;
+  display: inline-flex;
+}
+@media only screen and (max-width: 768px) {
+  .bid_form{
+    margin-left: 90px;
+  }
+  .current_bids_heading{
+    margin-left: 50px;
+  }
+}
+
+.bid_form label{
+  display: none;
+}
+.listing_top{
+  display: inline-flex;
+}
+.custom-height{
+  max-height: 200px;
+  overflow-y: auto;
+}
+.custom-height_comments{
+  margin-top: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.listing_image{
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.double_image{
+  position: relative; left: 0; top: 0;
+}
+@media (min-width: 576px) { 
+  .double_image{
+    text-align: center;
+  }
+ }
 .card{
     transition: all 250ms;
 }
@@ -17,6 +98,12 @@ body {
 }
 .listing_info{
     display: inline;
+}
+.input-2{
+  height: 40px;
+  margin-right: 20px;
+  width: 70%;
+  display: inline-flex;
 }
 .active_listing_heading{
     text-align: center;
@@ -62,6 +149,51 @@ body {
 .b6{
     text-align: center;
     margin-bottom: 20px;
+}
+.button-62 {
+  align-items: center;
+  text-align: center;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin-left: 4px;
+  min-height: 38px;
+  padding: 5px;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+.button-62:hover,
+.button-62:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.button-62:hover {
+  transform: translateY(-1px);
+}
+
+.button-62:active {
+  background-color: #F0F0F1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
 }
 .button-6 {
   align-items: center;
@@ -109,3 +241,66 @@ body {
   color: rgba(0, 0, 0, 0.65);
   transform: translateY(0);
 }
+
+/* The scrollbar styling is from w3schools */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+/* the form1 style was taken from my cs50's introduction to computer science final project */
+.form1 {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  }
+  .form1 input {
+    font-family:  sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  .form1 button {
+    font-family:  sans-serif;
+    outline: 0;
+    background: #000000;
+    width: 100%;
+    border: 0;
+    margin: 3px;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+  }
+  .form1 button:hover,.form button:active,.form button:focus {
+    background: #1a1a1a;
+  }
+  .form1 .register-form {
+    display: none;
+  }

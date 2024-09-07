@@ -6,7 +6,7 @@
   {% for listing in listings %}
 
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 m-2">
       <a class="text-decoration-none" href="{% url 'listingg' listing.id %}">
         <!-- the onerror attribute is from cs50.ai  -->
         <img src="{{ listing.url }}" class="card-img-top"

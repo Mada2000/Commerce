@@ -1,22 +1,24 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Categories</h2>
-
+<div class="categories_heading">
+<h2 class="active_listing_heading">Categories</h2>
+<div class="ms-auto nav-item">
 <form method="post" action="{% url 'categories' %}">
     {% csrf_token %}
-    <div class="custom-select">
-        <select name="c">
+    <div class="categories_form">
+        <select class="form-control" name="c">
             <option value="1">Fashion</option>
             <option value="2">Toys</option>
             <option value="3">Electronics</option>
             <option value="4">Home</option>
             <option value="5">Other</option>
         </select>
-        <button type="submit">Search</button>
+        <button class="button-62" type="submit">Search</button>
 </form>
 </div>
-
+</div>
+</div>
 <div class="row row-cols-1 row-cols-md-4 g-4">
     {% for category in categories %}
 

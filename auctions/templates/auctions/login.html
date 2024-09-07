@@ -2,12 +2,12 @@
 
 {% block body %}
 
-    <h2>Login</h2>
+<h2 class="form_header">Login</h2>
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
+<div class="form1">
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -16,9 +16,11 @@
         <div class="form-group">
             <input class="form-control" type="password" name="password" placeholder="Password">
         </div>
-        <input class="btn btn-primary" type="submit" value="Login">
+        <input class="button-6" type="submit" value="Login">
     </form>
 
+</div>
+<div class="form_header">
     Don't have an account? <a href="{% url 'register' %}">Register here.</a>
-
+</div>
 {% endblock %}

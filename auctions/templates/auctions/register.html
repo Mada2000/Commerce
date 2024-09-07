@@ -2,29 +2,37 @@
 
 {% block body %}
 
-    <h2>Register</h2>
+<h2 class="form_header">Register</h2>
 
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
+<div class="container-sm">
+    <div class="form1">
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="email" name="email" placeholder="Email Address">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+            </div>
+            <div class="b6">
+                <!-- the button style is from by Sketch https://getcssscan.com/css-buttons-examples !-->
+                <input class="button-6" value="Register" type="submit"></input>
+            </div>
+        </form>
 
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="email" name="email" placeholder="Email Address">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Register">
-    </form>
-
+    </div>
+</div>
+<div class="form_header">
     Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+</div>
 
 {% endblock %}
